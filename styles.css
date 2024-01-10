@@ -74,6 +74,21 @@ body {
     font-size: 1.1rem;
     outline: none;
     color: var(--Off-black);
+    cursor: pointer;
+    border: 1px solid var(--Light-grey);
+    border-radius: 3px;
+}
+
+.container__date__input>input:hover{
+    transition: all 1s;
+    border: 1px solid var(--Purple);
+}
+
+.error-day,.error-month,.error-year{
+    font-size: .7rem;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--Light-red);
 }
 
 .container__arrow {
@@ -104,6 +119,12 @@ body {
     transform: translate(-50%, -50%);
 }
 
+.container__arrow:hover > img{
+    cursor: pointer;
+    transition: all .5s;
+    background-color: var(--Off-black);
+}
+
 .container__results {
     margin-top: 1rem;
 }
@@ -118,6 +139,19 @@ body {
 
 .container__results__item__result {
     color: var(--Purple);
+}
+
+.container__date__input > .border-red{
+    border: 1px solid var(--Light-red);
+}
+
+.container__date__input > .border-red:hover{
+    border: 1px solid var(--Light-red);
+}
+
+
+.opacity-0{
+    opacity: 0;
 }
 
 @media (min-width: 767px) {
