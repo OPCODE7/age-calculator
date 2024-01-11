@@ -34,7 +34,7 @@
       <img src="assets/images/icon-arrow.svg" alt="icon-arrow" class="container__arrow__img">
 
     </article>
-    
+
     <article class="container__results">
       <p class="container__results__item"><span class="container__results__item__result">--</span>years</p>
       <p class="container__results__item"><span class="container__results__item__result">--</span>months</p>
@@ -43,50 +43,75 @@
   </section>
 
   <script>
-    const d= document;
-    const $btnCalculator= d.querySelector(".container__arrow__img"),
-    $day= d.getElementById("day"),
-    $month= d.getElementById("month"),
-    $year= d.getElementById("year"),
-    $errorDay= d.querySelector(".error-day"),
-    $errorMonth= d.querySelector(".error-month"),
-    $errorYear= d.querySelector(".error-year");
-    let date= new Date();
-    let currentYear= date.getFullYear();
-    
-    
-    $btnCalculator.addEventListener("click", e =>{
-      let day= parseInt($day.value);
-      let month= parseInt($month.value);
-      let year= parseInt($year.value);
+    const d = document;
+    const $btnCalculator = d.querySelector(".container__arrow__img"),
+      $day = d.getElementById("day"),
+      $month = d.getElementById("month"),
+      $year = d.getElementById("year"),
+      $errorDay = d.querySelector(".error-day"),
+      $errorMonth = d.querySelector(".error-month"),
+      $errorYear = d.querySelector(".error-year");
+    let date = new Date();
+    let currentYear = date.getFullYear();
 
-      if(!(day >= 1 && day <=31)){
-        $day.classList.add("border-red");
-        $day.focus();
-        $errorDay.classList.remove("opacity-0");
-      }else{
-        if($day.classList.contains("border-red")) $day.classList.remove("border-red");
-        $errorDay.classList.add("opacity-0");
-      }
+    const validateDay= (day,month,year) => {
+      let condition= "";
+        if(month===1 || month===3 || month=== 5 || month===7 || month===8 || month===10 || month===12){
+          condition= !(day >= 1 && day <= 31);
+        }else if(year % 2 === 0 && month===2){
+          condition= !(day >= 1 && day <= 29);
+        }
+        else if (month===2){
+          condition= !(day >= 1 && day <= 28);
+        }
+        else{
+          condition= !(day >= 1 && day <= 30);
+        }
 
-      validateInput(!(day >= 1 && day <=31),$day,$errorDay);
-      validateInput(!(month >= 1 && month <=12),$month,$errorMonth);
-      validateInput(!(year >= 1970 && year <= currentYear),$year,$errorYear);
+        return condition;
+    }
 
 
+    $btnCalculator.addEventListener("click", e => {
+      let day = parseInt($day.value);
+      let month = parseInt($month.value);
+      let year = parseInt($year.value);
+
+      let condition= validateDay(day,month,year);
+
+
+      validateInput(condition, $day, $errorDay);
+      validateInput(!(month >= 1 && month <= 12), $month, $errorMonth);
+      validateInput(!(year >= 1970 && year <= currentYear), $year, $errorYear);
     });
 
-    function validateInput(condition,input,message){
-      if(condition){
+    d.addEventListener("keyup", e => {
+      let day = parseInt($day.value);
+      let month = parseInt($month.value);
+      let year = parseInt($year.value);
+      if (e.target === $day) {
+        let condition= validateDay(day,month,year);
+        validateInput(condition, $day, $errorDay);
+      }
+      if (e.target === $month) {
+        validateInput(!(month >= 1 && month <= 12), $month, $errorMonth);
+      }
+      if (e.target === $year) {
+        validateInput(!(year >= 1970 && year <= currentYear), $year, $errorYear);
+      }
+    });
+
+    function validateInput(condition, input, message) {
+      if (condition) {
         input.classList.add("border-red");
         input.focus();
         message.classList.remove("opacity-0");
-      }else{
-        if(input.classList.contains("border-red")) input.classList.remove("border-red");
+      } else {
+        if (input.classList.contains("border-red")) input.classList.remove("border-red");
         message.classList.add("opacity-0");
       }
     }
-    
+
   </script>
 
 </body>
