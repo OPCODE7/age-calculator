@@ -36,9 +36,12 @@
     </article>
 
     <article class="container__results">
-      <p class="container__results__item"><span class="container__results__item__result">--</span>years</p>
-      <p class="container__results__item"><span class="container__results__item__result">--</span>months</p>
-      <p class="container__results__item"><span class="container__results__item__result">--</span>days</p>
+      <p class="container__results__item"><span class="container__results__item__result"
+          id="currentYears">--</span>years</p>
+      <p class="container__results__item"><span class="container__results__item__result"
+          id="currentMonths">--</span>months</p>
+      <p class="container__results__item"><span class="container__results__item__result" id="currentDays">--</span>days
+      </p>
     </article>
   </section>
 
@@ -50,39 +53,49 @@
       $year = d.getElementById("year"),
       $errorDay = d.querySelector(".error-day"),
       $errorMonth = d.querySelector(".error-month"),
-      $errorYear = d.querySelector(".error-year");
+      $errorYear = d.querySelector(".error-year"),
+      $currentYears = d.getElementById("currentYears"),
+      $currentMonths = d.getElementById("currentMonths"),
+      $currentDays = d.getElementById("currentDays");
     let date = new Date();
-    let currentYear = date.getFullYear();
+    let currentYear = date.getFullYear(),currentMonths= date.getMonth(),currentDays= date.getDay();
 
-    const validateDay= (day,month,year) => {
-      let condition= "";
-        if(month===1 || month===3 || month=== 5 || month===7 || month===8 || month===10 || month===12){
-          condition= !(day >= 1 && day <= 31);
-        }else if(year % 2 === 0 && month===2){
-          condition= !(day >= 1 && day <= 29);
-        }
-        else if (month===2){
-          condition= !(day >= 1 && day <= 28);
-        }
-        else{
-          condition= !(day >= 1 && day <= 30);
-        }
+    const validateDay = (day, month, year) => {
+      let condition = "";
+      if (month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) {
+        condition = !(day >= 1 && day <= 31);
+      } else if (year % 2 === 0 && month === 2) {
+        condition = !(day >= 1 && day <= 29);
+      }
+      else if (month === 2) {
+        condition = !(day >= 1 && day <= 28);
+      }
+      else {
+        condition = !(day >= 1 && day <= 30);
+      }
 
-        return condition;
+      return condition;
     }
 
+    const resetResults = () => {
+      $currentYears.textContent = "--";
+      $currentMonths.textContent = "--";
+      $currentDays.textContent = "--";
+    }
 
     $btnCalculator.addEventListener("click", e => {
       let day = parseInt($day.value);
       let month = parseInt($month.value);
       let year = parseInt($year.value);
+      let condition = validateDay(day, month, year);
+      let resultValidations = [], isValid = false;
+      resultValidations.push(validateInput(condition, $day, $errorDay));
+      resultValidations.push(validateInput(!(month >= 1 && month <= 12), $month, $errorMonth));
+      resultValidations.push(validateInput(!(year >= 1900 && year <= currentYear), $year, $errorYear));
 
-      let condition= validateDay(day,month,year);
+      isValid = resultValidations.some(element => element !== true);
 
-
-      validateInput(condition, $day, $errorDay);
-      validateInput(!(month >= 1 && month <= 12), $month, $errorMonth);
-      validateInput(!(year >= 1970 && year <= currentYear), $year, $errorYear);
+      isValid === true ? resetResults() : calculateAge(day, month, year);
     });
 
     d.addEventListener("keyup", e => {
@@ -90,26 +103,54 @@
       let month = parseInt($month.value);
       let year = parseInt($year.value);
       if (e.target === $day) {
-        let condition= validateDay(day,month,year);
+        let condition = validateDay(day, month, year);
         validateInput(condition, $day, $errorDay);
       }
       if (e.target === $month) {
         validateInput(!(month >= 1 && month <= 12), $month, $errorMonth);
       }
       if (e.target === $year) {
-        validateInput(!(year >= 1970 && year <= currentYear), $year, $errorYear);
+        validateInput(!(year >= 1900 && year <= currentYear), $year, $errorYear);
       }
     });
 
     function validateInput(condition, input, message) {
+      let result = false;
       if (condition) {
         input.classList.add("border-red");
         input.focus();
         message.classList.remove("opacity-0");
+        result = false;
       } else {
         if (input.classList.contains("border-red")) input.classList.remove("border-red");
         message.classList.add("opacity-0");
+        result = true;
       }
+
+      return result;
+    }
+
+    function calculateAge(days, months, years) {
+      let objectWeekDays= {
+        0: "1",
+        1: "2",
+        2: "3",
+        3: "4",
+        4: "5",
+        5: "6",
+        6: "7",
+        7: "8",
+        8: "9",
+        9: "10",
+        10: "11",
+        11: "12",
+      }
+      $currentYears.textContent = currentYear - years;
+      $currentMonths.textContent= objectWeekDays[currentMonths];
+
+      $currentDays.textContent= currentDays;
+
+
     }
 
   </script>

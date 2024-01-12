@@ -139,7 +139,9 @@ body {
 
 .container__results__item__result {
     color: var(--Purple);
+    margin-right: 10px;
 }
+
 
 .container__date__input > .border-red{
     border: 1px solid var(--Light-red);
