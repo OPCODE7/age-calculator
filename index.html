@@ -58,7 +58,7 @@
       $currentMonths = d.getElementById("currentMonths"),
       $currentDays = d.getElementById("currentDays");
     let date = new Date();
-    let currentYear = date.getFullYear(),currentMonths= date.getMonth(),currentDays= date.getDay();
+    let currentYear = date.getFullYear(), currentMonths = date.getMonth() + 1, currentDays = date.getDate();
 
     const validateDay = (day, month, year) => {
       let condition = "";
@@ -131,27 +131,48 @@
     }
 
     function calculateAge(days, months, years) {
-      let objectWeekDays= {
-        0: "1",
-        1: "2",
-        2: "3",
-        3: "4",
-        4: "5",
-        5: "6",
-        6: "7",
-        7: "8",
-        8: "9",
-        9: "10",
-        10: "11",
-        11: "12",
-      }
-      $currentYears.textContent = currentYear - years;
-      $currentMonths.textContent= objectWeekDays[currentMonths];
 
-      $currentDays.textContent= currentDays;
+      // if (currentDays === days && (currentMonths + 1) === months) {
+      //   setAgeValues(0, (currentYear - years), 0);
+      // } else if ((currentDays === days) && ((currentMonths + 1) > months)) {
+      //   setAgeValues(0, (currentYear - years), (currentMonths - months));
+      // } else if ((currentDays > days) && ((currentMonths + 1) > months)) {
+      //   setAgeValues((currentDays - days), (currentYear - years), (currentMonths - months));
+      // } else if ((days > currentDays) && (months === currentMonths + 1)) {
+      //   setAgeValues((days - currentDays), (currentYear - years - 1), 0);
+      // } else if ((days > currentDays) && (months > currentMonths + 1)) {
+      //   setAgeValues(currentDays, (currentYear - years - 1), currentMonths + 1);
+      // } else if ((days < currentDays) && ((currentMonths + 1) < months)) {
+      //   setAgeValues(currentDays, currentYear - years - 1, months - (currentMonths + 1));
+      // } else if ((days < currentDays) && ((currentMonths + 1) === months)) {
+      //   setAgeValues(currentDays - days
+      //     , currentYear - years - 1, months - (currentMonths + 1));
+      // }
+
+        let difYears= currentYear - years, difMonths= currentMonths-months,difDays= currentDays-days;
+
+        let finalYears, finalMonths= Math.sign(difMonths)===-1 ? 12 + difMonths: 12 - difMonths,finalDays= Math.sign(difDays)===-1  ? 30 + difDays : 30 - difDays;
+
+        if(currentMonths<months){
+          finalYears= difYears-1;
+        }else{
+          finalYears= difYears;
+        }
+
+        console.log(currentDays,days)
+
+        setAgeValues(finalDays,finalYears,finalMonths);
 
 
     }
+
+
+    function setAgeValues(day, year, month) {
+      $currentYears.textContent = year;
+      $currentMonths.textContent = month;
+      $currentDays.textContent = day;
+    }
+
 
   </script>
 
